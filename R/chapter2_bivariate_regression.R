@@ -190,3 +190,27 @@ fit_curve <- function(x, y, type = "linear", new_x = x) {
   metrics <- fit_metrics(y, y_est)
   list(type = type, parameters = params, y_est = y_est, predictions = pred, metrics = metrics)
 }
+
+#' Multiple Linear Regression via Normal Equations Matrix: A = (M^t * M)^(-1) * M^t * Y (Slides 94-101)
+#' @param M Design matrix (include column of 1s if intercept a_0 is needed!).
+#' @param y Response vector Y.
+#' @examples
+#' # Plane fit z = a + b*x + c*y (Slide 98):
+#' x <- c(0, 1, 0, -1, 0, 1, 1, 2)
+#' y <- c(0, 1, 1, 1, 3, 2, 2, 0)
+#' z <- c(2, 3, 4, 5, 7, 4, 5, 0)
+#' M <- cbind(1, x, y)
+#' matrix_ols(M, z)
+#' @export
+matrix_ols <- function(M, y) {
+  M <- as.matrix(M)
+  coeffs <- as.numeric(solve(t(M) %*% M, t(M) %*% y))
+  y_est  <- as.numeric(M %*% coeffs)
+  list(
+    coefficients = coeffs,
+    Mt_M = t(M) %*% M,
+    Mt_Y = as.numeric(t(M) %*% y),
+    y_est = y_est,
+    metrics = fit_metrics(y, y_est)
+  )
+}

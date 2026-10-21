@@ -3,7 +3,7 @@
 \name{ts_full_analysis}
 \alias{ts_full_analysis}
 \title{Complete Time Series Decomposition, Deseasonalization & Trend Line (Slides 24-55)
-Follows exact professor's R code from Chapter 3!}
+Follows exact R code from Chapter 3}
 \usage{
 ts_full_analysis(
   xx,
@@ -26,7 +26,7 @@ ts_full_analysis(
 }
 \description{
 Complete Time Series Decomposition, Deseasonalization & Trend Line (Slides 24-55)
-Follows exact professor's R code from Chapter 3!
+Follows exact R code from Chapter 3
 }
 \examples{
 xx <- c(178.2, 153.2, 185.9, 163.6, 196.3, 156.9, 197.9, 166.4,

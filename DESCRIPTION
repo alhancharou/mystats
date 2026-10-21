@@ -8,6 +8,7 @@ Description: Package with definitions and programs for the statistics exam.
     linear regression, quick plots, a sample data generator, and probability distributions.
 License: MIT + file LICENSE
 Encoding: UTF-8
+LazyData: true
 Depends: R (>= 3.5.0)
 Imports: stats, graphics
 Suggests: testthat (>= 3.0.0)

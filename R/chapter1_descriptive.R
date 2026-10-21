@@ -130,3 +130,73 @@ quantile_grouped <- function(L_low, L_high, n_i, c_prob = 0.5) {
   a_i <- L_high[idx] - L_low[idx]
   L_low[idx] + ((c_prob * N - N_prev) / n_i[idx]) * a_i
 }
+
+#' Exact Discrete Quantile / Percentile using E + D rule (Slide 44)
+#' If c*N has decimal part (D != 0) -> takes (E+1)-th ordered value.
+#' If c*N is integer (D == 0) -> takes average of E-th and (E+1)-th values.
+#' @param x Numeric vector of raw values (or unique values if n_i is given).
+#' @param c_prob Probability in (0, 1), e.g., 0.25 for Q1, 0.5 for Median, 0.37 for P37.
+#' @param n_i Optional vector of integer frequencies.
+#' @examples
+#' x <- c(2, 5, 3, 4, 7, 0, 11, 2, 3, 8)
+#' quantile_discrete(x, c(0.25, 0.5, 0.75, 0.37, 0.68))
+#' @export
+quantile_discrete <- function(x, c_prob = 0.5, n_i = NULL) {
+  if (!is.null(n_i)) x <- rep(x, n_i)
+  x_sorted <- sort(x)
+  N <- length(x_sorted)
+  
+  sapply(c_prob, function(p) {
+    cN <- round(p * N, 10)
+    E <- floor(cN)
+    D <- cN - E
+    if (D > 1e-9) {
+      x_sorted[E + 1]
+    } else {
+      if (E == 0) return(x_sorted[1])
+      if (E >= N) return(x_sorted[N])
+      (x_sorted[E] + x_sorted[E + 1]) / 2
+    }
+  })
+}
+
+#' Mode for Raw Data Vector (finds all modes, or NULL if all frequencies are equal) (Slide 37-38)
+#' @param x Numeric vector of observations.
+#' @examples
+#' raw_mode(c(7, 11, 11, 8, 12, 9, 6, 6))
+#' @export
+raw_mode <- function(x) {
+  tab <- table(x)
+  max_f <- max(tab)
+  if (all(tab == max_f)) return(NA) # No mode if all values appear equally often
+  as.numeric(names(tab)[tab == max_f])
+}
+
+#' Interval Helpers: Class Marks (x_i), Widths (a_i), Density Heights (h_i), and Modal Interval (Slides 13, 23, 37)
+#' @param breaks Numeric vector of interval boundaries (length k + 1), e.g., c(0, 3, 6, 9, 12, 15).
+#' @param n_i Numeric vector of frequencies in each interval (length k).
+#' @examples
+#' interval_table(c(70, 80, 85, 90, 95, 110), c(9, 8, 5, 7, 6))
+#' @export
+interval_table <- function(breaks, n_i) {
+  L_low  <- breaks[-length(breaks)]
+  L_high <- breaks[-1]
+  marks  <- (L_low + L_high) / 2
+  widths <- L_high - L_low
+  f_i    <- n_i / sum(n_i)
+  h_n    <- n_i / widths
+  h_f    <- f_i / widths
+  modal_idx <- which(h_n == max(h_n))
+  
+  list(
+    summary_table = data.frame(
+      L_low = L_low, L_high = L_high, class_mark_xi = marks,
+      width_ai = widths, n_i = n_i, f_i = f_i,
+      N_cum = cumsum(n_i), F_cum = cumsum(f_i),
+      height_ni_ai = h_n, height_fi_ai = h_f
+    ),
+    modal_interval_low = L_low[modal_idx],
+    modal_interval_high = L_high[modal_idx],
+    max_height = max(h_n)
+  )
+}

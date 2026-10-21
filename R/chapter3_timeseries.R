@@ -17,7 +17,7 @@ moving_avg <- function(x, k) {
 }
 
 #' Complete Time Series Decomposition, Deseasonalization & Trend Line (Slides 24-55)
-#' Follows exact professor's R code from Chapter 3!
+#' Follows exact R code from Chapter 3
 #' @param xx Numeric vector of observations.
 #' @param freq Seasonal period (4 for quarterly, 12 for monthly).
 #' @param start_yr Start vector c(year, subperiod), e.g., c(1980, 1).
