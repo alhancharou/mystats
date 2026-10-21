@@ -134,3 +134,9 @@ if (!require("mystats", quietly = TRUE)) {
   remotes::install_github("alhancharou/mystats")
 }
 library(mystats)
+
+# after opening mystats.R from pendrive
+devtools::install()
+#or
+devtools::load_all()
+#or Build > install
