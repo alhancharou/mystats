@@ -127,3 +127,10 @@ simple_index <- function(x, base_pos = 1) {
 deflate_val <- function(nominal, cpi_per_unit) {
   nominal / cpi_per_unit
 }
+
+
+# IF mystats not downloaded - download from GitHub:
+if (!require("mystats", quietly = TRUE)) {
+  remotes::install_github("alhancharou/mystats")
+}
+library(mystats)
