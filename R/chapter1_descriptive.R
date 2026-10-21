@@ -200,3 +200,25 @@ interval_table <- function(breaks, n_i) {
     max_height = max(h_n)
   )
 }
+
+#examples of usage
+
+tab <- matrix(c(
+  2, 4, 0,
+  1, 3, 2,
+  0, 2, 6
+), nrow = 3, byrow = TRUE)
+
+p_x <- colSums(tab)
+
+p_x_given_y3 <- tab[2, ] # y3 - second line
+
+# reg_lines expects (Rows, Columns, tab)! In our case, Y is in rows and X is in columns.
+# Therefore, it is easier to transpose the table t(tab) so that X becomes rows and Y becomes columns:
+res <- reg_lines(x_vals, y_vals, tab = t(tab))
+res$cov          # Covariance Cov(X,Y)
+res$r            # Correlation r
+res$Y_on_X_a     # 'a' for the line y = a + b*x
+res$Y_on_X_b     # 'b' (slope) for the line y = a + b*x
+res$X_on_Y_a_prime # 'a'' for the line x = a' + b'*y
+res$X_on_Y_b_prime # 'b'' for the line x = a' + b'*y

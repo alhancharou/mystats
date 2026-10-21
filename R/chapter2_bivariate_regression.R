@@ -214,3 +214,20 @@ matrix_ols <- function(M, y) {
     metrics = fit_metrics(y, y_est)
   )
 }
+
+#example of usage
+
+# Fit models and immediately request a prediction for x = 6 (new_x = 6):
+m_lin <- fit_curve(x, y, type = "linear", new_x = 6)
+m_exp <- fit_curve(x, y, type = "exp",    new_x = 6)
+m_hyp <- fit_curve(x, y, type = "hyp",    new_x = 6)
+# (if y = a*x^b is requested -> type = "power"; if y = a*b^x -> type = "abx"; for parabola -> "quad")
+
+# Compare R2 and MSE:
+m_lin$metrics$R2;  m_lin$metrics$MSE
+m_exp$metrics$R2;  m_exp$metrics$MSE
+m_hyp$metrics$R2;  m_hyp$metrics$MSE
+
+# Suppose m_exp has the largest R2. Let's look at its parameters (a, b) and the prediction for x = 6:
+m_exp$parameters   # Returns coefficients a and b
+m_exp$predictions  # Ready-to-use prediction for Y when x = 6
